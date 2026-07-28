@@ -1,0 +1,342 @@
+TweenService = game:GetService("TweenService")
+local Players = game:GetService("Players")
+
+local Player = Players.LocalPlayer
+local PlayerGui = Player:WaitForChild("PlayerGui")
+
+-- ScreenGui
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Name = "CustomUI"
+ScreenGui.ResetOnSpawn = false
+ScreenGui.Parent = PlayerGui
+
+-- Main Frame
+local Main = Instance.new("Frame")
+Main.Size = UDim2.new(0,520,0,320)
+Main.Position = UDim2.new(0.5,-260,-1,0)
+Main.BackgroundColor3 = Color3.fromRGB(20,20,20)
+Main.BorderSizePixel = 2
+Main.BorderColor3 = Color3.fromRGB(255,255,255)
+Main.Parent = ScreenGui
+
+local Corner = Instance.new("UICorner")
+Corner.CornerRadius = UDim.new(0,12)
+Corner.Parent = Main
+
+-- หัวข้อ
+local TopBar = Instance.new("Frame")
+TopBar.Size = UDim2.new(1,0,0,50)
+TopBar.BackgroundColor3 = Color3.fromRGB(15,15,15)
+TopBar.BorderSizePixel = 0
+TopBar.Parent = Main
+
+local TopCorner = Instance.new("UICorner")
+TopCorner.CornerRadius = UDim.new(0,12)
+TopCorner.Parent = TopBar
+
+local Title = Instance.new("TextLabel")
+Title.Size = UDim2.new(1,0,1,0)
+Title.BackgroundTransparency = 1
+Title.Text = "Lucky Block UI"
+Title.TextColor3 = Color3.new(1,1,1)
+Title.TextScaled = true
+Title.Font = Enum.Font.GothamBold
+Title.Parent = TopBar
+
+-- เส้นแบ่ง
+local Line = Instance.new("Frame")
+Line.Size = UDim2.new(1,0,0,2)
+Line.Position = UDim2.new(0,0,0,50)
+Line.BackgroundColor3 = Color3.fromRGB(255,255,255)
+Line.BorderSizePixel = 0
+Line.Parent = Main
+
+-- เมนูด้านซ้าย
+local Menu = Instance.new("Frame")
+Menu.Size = UDim2.new(0,170,1,-52)
+Menu.Position = UDim2.new(0,0,0,52)
+Menu.BackgroundColor3 = Color3.fromRGB(25,25,25)
+Menu.BorderSizePixel = 0
+Menu.Parent = Main
+
+-- พื้นที่เนื้อหา
+local Content = Instance.new("Frame")
+Content.Size = UDim2.new(1,-180,1,-62)
+Content.Position = UDim2.new(0,175,0,57)
+Content.BackgroundTransparency = 1
+Content.Parent = Main
+
+-- Animation เปิด
+TweenService:Create(
+	Main,
+	TweenInfo.new(
+		0.6,
+		Enum.EasingStyle.Quart,
+		Enum.EasingDirection.Out
+	),
+	{
+		Position = UDim2.new(0.5,-260,0.5,-160)
+	}
+):Play()
+-- Drag UI
+local UIS = game:GetService("UserInputService")
+
+local Dragging = false
+local DragInput
+local DragStart
+local Connect
+
+TopBar.InputBegan:Connect(function(Input)
+    if Input.UserInputType == Enum.UserInputType.MouseButton1
+    or Input.UserInputType == Enum.UserInputType.Touch then
+        Dragging = true
+        DragStart = Input.Position
+        StartPos = Main.Position
+
+        Input.Changed:Connect(function()
+            if Input.UserInputState == Enum.UserInputState.End then
+                Dragging = false
+            end
+        end)
+    eendend)
+
+TopBar.InputChanged:Connect(function(Input)
+    if Input.UserInputType == Enum.UserInputType.MouseMovement
+    or Input.UserInputType == Enum.UserInputType.Touch then
+        DragInput = Input
+    end
+end)
+
+UIS.InputChanged:Connect(function(Input)
+    if Input == DragInput and Dragging then
+        local Delta = Input.Position - DragStart
+
+        Main.Position = UDim2.new(
+            StartPos.X.Scale,
+            StartPos.X.Offset + Delta.X,
+            StartPos.Y.Scale,
+            StartPos.Y.Offset + Delta.Y
+        )
+    end
+end)
+-- =========================
+-- Drag UI
+-- =========================
+
+local UIS = game:GetService("UserInputService")
+
+local Dragging = false
+local DragStart
+local StartPos
+
+TopBar.InputBegan:Connect(function(Input)
+	if Input.UserInputType == Enum.UserInputType.MouseButton1
+	or Input.UserInputType == Enum.UserInputType.Touch then
+
+		Dragging = true
+		DragStart = Input.Position
+		StartPos = Main.Position
+
+		Input.Changed:Connect(function()
+			if Input.UserInputState == Enum.UserInputState.End then
+				Dragging = false
+			end
+		end)
+	end
+end)
+
+UIS.InputChanged:Connect(function(Input)
+	if Dragging then
+		if Input.UserInputType == Enum.UserInputType.MouseMovement
+		or Input.UserInputType == Enum.UserInputType.Touch then
+
+			local Delta = Input.Position - DragStart
+
+			Main.Position = UDim2.new(
+				StartPos.X.Scale,
+				StartPos.X.Offset + Delta.X,
+				StartPos.Y.Scale,
+				StartPos.Y.Offset + Delta.Y
+			)
+		end
+	end
+end)
+
+-- =========================
+-- ปุ่มย่อ
+-- =========================
+
+local Minimize = Instance.new("TextButton")
+Minimize.Size = UDim2.new(0,30,0,30)
+Minimize.Position = UDim2.new(1,-40,0.5,-15)
+Minimize.BackgroundColor3 = Color3.fromRGB(35,35,35)
+Minimize.Text = "-"
+Minimize.TextColor3 = Color3.new(1,1,1)
+Minimize.Font = Enum.Font.GothamBold
+Minimize.TextScaled = true
+Minimize.Parent = TopBar
+
+local Corner1 = Instance.new("UICorner")
+Corner1.CornerRadius = UDim.new(0,8)
+Corner1.Parent = Minimize
+
+-- =========================
+-- ปปุ่มMinimize.MouseButton1Click:Connect(function()
+
+	UIS.InputChanged:Connect(function(Input)
+		Main,
+		TweenInfo.new(0.35,Enum.EasingStyle.Quart),
+		{
+			Size = UDim2.new(0,0,0,0)
+		}
+	):Play()
+DOpenButton.Text = "D"
+OpenButton.TextScaled = true
+OpenButton.TextColor3 = Color3.new(1,1,1)
+OpenButton.Font = Enum.Font.GothamBold
+OpenButton.Visible = false
+OpenButton.Parent = SOpenButton
+local Corner2 = Instance.new("UICorner")
+Corner2.CornerRadius = UDim.new(1,0)
+Corner2.Parent = OpenButton
+
+local Stroke = Instance.new("UIStroke")
+Stroke.Color = Color3.new(1,1,1)
+Stroke.Thickness = 2
+Stroke.Parent = OpenButton
+
+-- =========================
+-- ย่อ UI
+-- =========================
+
+Minimize.MouseButton1Click:Connect(function()
+
+	UIS.InputChanged:Connect(function(Input)
+		Main,
+		TweenInfo.new(0.35,Enum.EasingStyle.Quart),
+		{
+			Size = UDim2.new(0,0,0,0)
+		}
+	):Play()
+
+	task.wait(0.35)
+
+	Main.Visible = false
+	OpenButton.Visible = true
+
+end)
+
+-- =========================
+-- เปิด UI
+-- =========================
+
+OpenButton.MouseButton1Click:Connect(function()
+
+	Main.Visible = true
+	Main.Size = UDim2.new(0,0,0,0)
+
+	TweenService:Create(
+		Main,
+		TweenInfo.new(0.35,Enum.EasingStyle.Quart),
+		{
+			Size = UDim2.new(0,520,0,320)
+		}
+	):Play()
+
+	OpenButton.Visible = false
+
+end)
+-- =========================
+-- ลากปุ่ม D
+-- =========================
+
+local DraggingButton = false
+local ButtonDragStart
+local ButtonStartPos
+
+OpenButton.InputBegan:Connect(function(Input)
+	if Input.UserInputType == Enum.UserInputType.MouseButton1
+	or Input.UserInputType == Enum.UserInputType.Touch then
+
+		DraggingButton = true
+		ButtonDragStart = Input.Position
+		ButtonStartPos = OpenButton.Position
+
+		Input.Changed:Connect(function()
+			if Input.UserInputState == Enum.UserInputState.End then
+				DraggingButton = false
+			end
+		end)
+	end
+end)
+
+UIS.InputChanged:Connect(function(Input)
+	if DraggingButton then
+		if Input.UserInputType == Enum.UserInputType.MouseMovement
+		or Input.UserInputType == Enum.UserInputType.Touch then
+
+			local Delta = Input.Position - ButtonDragStart
+
+			OpenButton.Position = UDim2.new(
+				ButtonStartPos.X.Scale,
+				ButtonStartPos.X.Offset + Delta.X,
+				ButtonStartPos.Y.Scale,
+				ButtonStartPos.Y.Offset + Delta.Y
+			)
+		end
+	end)
+-- =========================
+-- ขอบเรืองแสง
+-- =========================
+
+local MainStroke = Instance.new("UIStroke")
+MainStroke.Parent = Main
+MainStroke.Color = Color3.fromRGB(255,255,255)
+MainStroke.Thickness = 1.8
+MainStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+
+local Gradient = Instance.new("UIGradient")
+Gradient.Color = ColorSequence.new{
+	ColorSequenceKeypoint.new(0, Color3.fromRGB(255,255,255)),
+	ColorSequenceKeypoint.new(1, Color3.fromRGB(180,180,180))
+}
+Gradient.Parent = MainStroke
+end)
+-- =========================
+-- เงา
+-- =========================
+
+local Shadow = Instance.new("ImageLabel")
+Shadow.Name = "Shadow"
+Shadow.Parent = Main
+
+Shadow.BackgroundTransparency = 1
+Shadow.Image = "rbxassetid://1316045217"
+Shadow.ScaleType = Enum.ScaleType.Slice
+Shadow.SliceCenter = Rect.new(10,10,118,118)
+
+Shadow.Size = UDim2.new(1,40,1,40)
+Shadow.Position = UDim2.new(0,-20,0,-20)
+
+Shadow.ImageTransparency = 0.55
+Shadow.ZIndex = 0
+
+Main.ZIndex = 2
+TopBar.ZIndex = 3
+Title.ZIndex = 4
+local Menu = Instance.new(...)
+local MainButton = Instance.new("TextButton")
+MainButton.Parent = Menu
+
+MainButton.Size = UDim2.new(1,-20,0,42)
+MainButton.Position = UDim2.new(0,10,0,10)
+
+MainButton.BackgroundColor3 = Color3.fromRGB(40,40,40)
+MainButton.Text = "🏠 หน้าหลัก"
+MainButton.Font = Enum.Font.GothamBold
+MainButton.TextColor3 = Color3.new(1,1,1)
+MainButton.TextSize = 17
+
+local MainCorner = Instance.new("UICorner")
+MainCorner.Parent = MainButton
+MainCorner.CornerRadius = UDim.new(0,10)
